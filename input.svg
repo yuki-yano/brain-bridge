@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- 背景円 -->
+  <circle cx="64" cy="64" r="60" fill="#2A3F6C"/>
+  
+  <!-- 左脳のシンボル -->
+  <path d="M30 64 C30 45 45 30 64 30" stroke="#A5B4FC" stroke-width="4" fill="none"/>
+  <path d="M30 64 C30 83 45 98 64 98" stroke="#A5B4FC" stroke-width="4" fill="none"/>
+  
+  <!-- 右脳のシンボル -->
+  <path d="M98 64 C98 45 83 30 64 30" stroke="#C7D2FE" stroke-width="4" fill="none"/>
+  <path d="M98 64 C98 83 83 98 64 98" stroke="#C7D2FE" stroke-width="4" fill="none"/>
+  
+  <!-- 中央の接続部分 -->
+  <circle cx="64" cy="64" r="8" fill="#818CF8"/>
+  
+  <!-- ニューラル接続を表す放射状の線 -->
+  <g stroke="#A5B4FC" stroke-width="2">
+    <line x1="64" y1="48" x2="64" y2="40" />
+    <line x1="76" y1="52" x2="82" y2="46" />
+    <line x1="80" y1="64" x2="88" y2="64" />
+    <line x1="76" y1="76" x2="82" y2="82" />
+    <line x1="64" y1="80" x2="64" y2="88" />
+    <line x1="52" y1="76" x2="46" y2="82" />
+    <line x1="48" y1="64" x2="40" y2="64" />
+    <line x1="52" y1="52" x2="46" y2="46" />
+  </g>
+  
+  <!-- 小さな接続点 -->
+  <g fill="#818CF8">
+    <circle cx="64" cy="40" r="2" />
+    <circle cx="82" cy="46" r="2" />
+    <circle cx="88" cy="64" r="2" />
+    <circle cx="82" cy="82" r="2" />
+    <circle cx="64" cy="88" r="2" />
+    <circle cx="46" cy="82" r="2" />
+    <circle cx="40" cy="64" r="2" />
+    <circle cx="46" cy="46" r="2" />
+  </g>
+  
+  <!-- グロー効果 -->
+  <circle cx="64" cy="64" r="12" fill="url(#glow)" opacity="0.5"/>
+  
+  <!-- グラデーション定義 -->
+  <defs>
+    <radialGradient id="glow" cx="64" cy="64" r="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#818CF8" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#818CF8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
