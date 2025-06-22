@@ -1,6 +1,6 @@
 import { Settings2, X } from "lucide-react"
 import React, { useEffect, useState } from "react"
-import browser from "webextension-polyfill"
+import { browser } from "#imports"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import {

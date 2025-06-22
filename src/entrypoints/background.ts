@@ -2,8 +2,7 @@ import { createAnthropic } from "@ai-sdk/anthropic"
 import { createDeepSeek } from "@ai-sdk/deepseek"
 import { createOpenAI } from "@ai-sdk/openai"
 import { generateText } from "ai"
-import browser from "webextension-polyfill"
-import { defineBackground } from "wxt/sandbox"
+import { browser, defineBackground } from "#imports"
 
 interface Settings {
   provider: "openai" | "claude" | "deepseek"
@@ -140,19 +139,21 @@ export default defineBackground(() => {
   })
 
   // コンテンツスクリプトからのメッセージを処理
-  browser.runtime.onMessage.addListener(async (message: unknown): Promise<TranslationResult> => {
+  browser.runtime.onMessage.addListener((message: unknown, _sender: chrome.runtime.MessageSender, sendResponse: (response: TranslationResult) => void) => {
     const msg = message as Message
 
     if (msg.type === "TRANSLATE" && msg.text && msg.provider && msg.apiKey && msg.model) {
-      try {
-        const { text: translatedText, tokenUsage } = await translateText(msg.text, msg.provider, msg.apiKey, msg.model)
-        return { success: true, translatedText, tokenUsage }
-      } catch (e) {
-        const error = e as Error
-        return { error: error.message, success: false }
-      }
+      translateText(msg.text, msg.provider, msg.apiKey, msg.model)
+        .then(({ text: translatedText, tokenUsage }) => {
+          sendResponse({ success: true, translatedText, tokenUsage })
+        })
+        .catch((e) => {
+          const error = e as Error
+          sendResponse({ error: error.message, success: false })
+        })
+      return true // 非同期応答のため
     }
 
-    return { error: "不明なメッセージタイプです", success: false }
+    sendResponse({ error: "不明なメッセージタイプです", success: false })
   })
 })

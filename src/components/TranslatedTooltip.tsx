@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import browser from "webextension-polyfill"
+import { browser } from "#imports"
 import { calculateCost, DEFAULT_SETTINGS, MODEL_OPTIONS, STORAGE_KEYS, TokenUsage } from "../const"
 import { useTooltipPosition } from "../hooks/useTooltipPosition"
 import {

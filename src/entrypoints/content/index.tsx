@@ -1,7 +1,5 @@
 import { createRoot } from "react-dom/client"
-import browser from "webextension-polyfill"
-import { createShadowRootUi } from "wxt/client"
-import { defineContentScript } from "wxt/sandbox"
+import { browser, createShadowRootUi, defineContentScript } from "#imports"
 import { TranslatedTooltip } from "../../components/TranslatedTooltip"
 
 interface Message {
@@ -70,14 +68,15 @@ export default defineContentScript({
     })
 
     // メッセージリスナー
-    browser.runtime.onMessage.addListener((message: unknown, _sender, _sendResponse) => {
+    browser.runtime.onMessage.addListener((message: unknown, _sender: chrome.runtime.MessageSender, sendResponse: (response: { selectedText?: string; error?: string; success?: boolean }) => void) => {
       const msg = message as Message
       if (msg.type === "GET_SELECTED_TEXT") {
-        return Promise.resolve({ selectedText })
+        sendResponse({ selectedText })
+        return
       }
 
       if (msg.type === "TRANSLATE_SELECTION" && selectedRange && selectedText) {
-        return (async () => {
+        (async () => {
           try {
             const response = (await browser.runtime.sendMessage({
               type: "TRANSLATE",
@@ -110,24 +109,26 @@ export default defineContentScript({
                 },
               })
 
-              return response
+              sendResponse(response)
             } else {
               throw new Error(response.error || "翻訳に失敗しました")
             }
           } catch (error) {
             console.error("Translation error:", error)
             const errorMessage = error instanceof Error ? error.message : "翻訳中にエラーが発生しました"
-            return { error: errorMessage, success: false }
+            sendResponse({ error: errorMessage, success: false })
           }
         })()
+        return true // 非同期応答のため
       }
 
       if (msg.type === "TRANSLATION_ERROR") {
         console.error("Translation error:", msg.error)
-        return Promise.resolve({ error: msg.error, success: false })
+        sendResponse({ error: msg.error, success: false })
+        return
       }
 
-      return Promise.resolve({ error: "不明なメッセージタイプです", success: false })
+      sendResponse({ error: "不明なメッセージタイプです", success: false })
     })
 
     // テキストを翻訳する関数
@@ -388,21 +389,23 @@ export default defineContentScript({
     }
 
     // メッセージリスナー
-    browser.runtime.onMessage.addListener(async (message: unknown) => {
+    browser.runtime.onMessage.addListener((message: unknown, _sender: chrome.runtime.MessageSender, sendResponse: (response: { selectedText?: string; error?: string; success?: boolean; tokenUsage?: TranslationResponse["tokenUsage"] }) => void) => {
       const msg = message as { type: string }
 
       if (msg.type === "GET_SELECTED_TEXT") {
         const selection = window.getSelection()
-        return Promise.resolve({
+        sendResponse({
           selectedText: selection ? selection.toString().trim() : "",
         })
+        return
       }
 
       if (msg.type === "TRANSLATION_ERROR") {
         const { error } = message as { type: string; error: string }
         console.error("Translation error:", error)
         // TODO: エラーメッセージをユーザーに表示する処理を追加
-        return Promise.resolve({ success: false })
+        sendResponse({ success: false })
+        return
       }
 
       if (msg.type === "TRANSLATE_SELECTION") {
@@ -415,24 +418,27 @@ export default defineContentScript({
 
         const selection = window.getSelection()
         if (!selection || selection.rangeCount === 0) {
-          return Promise.resolve({ success: false, error: "テキストが選択されていません" })
+          sendResponse({ success: false, error: "テキストが選択されていません" })
+          return
         }
 
         const originalRange = selection.getRangeAt(0).cloneRange()
 
-        try {
-          const results = await translateRange(originalRange, provider, apiKey, model)
-          return { success: true, tokenUsage: results?.tokenUsage }
-        } catch (error_1) {
-          console.error("Translation error:", error_1)
-          return {
-            error: error_1 instanceof Error ? error_1.message : String(error_1),
-            success: false,
-          }
-        }
+        translateRange(originalRange, provider, apiKey, model)
+          .then((results) => {
+            sendResponse({ success: true, tokenUsage: results?.tokenUsage })
+          })
+          .catch((error_1) => {
+            console.error("Translation error:", error_1)
+            sendResponse({
+              error: error_1 instanceof Error ? error_1.message : String(error_1),
+              success: false,
+            })
+          })
+        return true // 非同期応答のため
       }
 
-      return Promise.resolve({ error: "不明なメッセージタイプです", success: false })
+      sendResponse({ error: "不明なメッセージタイプです", success: false })
     })
   },
 })
