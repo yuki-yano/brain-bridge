@@ -9,7 +9,7 @@ export default defineConfig({
     host_permissions: ["https://*.openai.com/*", "https://*.anthropic.com/*", "https://*.googleapis.com/*"],
     browser_specific_settings: {
       gecko: {
-        id: "brain-bridge@example.com",
+        id: "{8ab24243-3060-47fb-a71a-fd762caaad57}",
         strict_min_version: "109.0",
       },
     },
