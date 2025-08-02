@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Brain Bridge is a browser extension built with WXT framework that provides real-time translation capabilities. It supports multiple AI providers (OpenAI, Anthropic Claude, DeepSeek) and allows users to translate selected text on web pages.
+Brain Bridge is a browser extension built with WXT framework that provides real-time translation capabilities. It supports multiple AI providers (OpenAI, Anthropic Claude, Google Gemini) and allows users to translate selected text on web pages.
 
 ## Development Commands
 
@@ -67,7 +67,7 @@ pnpm format             # Format code with Prettier
 
 ### AI Provider Integration
 
-- Supports OpenAI, Anthropic Claude, and DeepSeek APIs
+- Supports OpenAI, Anthropic Claude, and Google Gemini APIs
 - Uses the `ai` SDK for unified interface across providers
 - API keys are stored in browser sync storage
 

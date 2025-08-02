@@ -1,11 +1,11 @@
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { createDeepSeek } from "@ai-sdk/deepseek"
+import { createGoogleGenerativeAI } from "@ai-sdk/google"
 import { createOpenAI } from "@ai-sdk/openai"
 import { generateText } from "ai"
 import { browser, defineBackground } from "#imports"
 
 interface Settings {
-  provider: "openai" | "claude" | "deepseek"
+  provider: "openai" | "claude" | "gemini"
   apiKey: string
   model: string
 }
@@ -55,8 +55,8 @@ async function translateText(
         },
       })
       break
-    case "deepseek":
-      ai = createDeepSeek({
+    case "gemini":
+      ai = createGoogleGenerativeAI({
         apiKey,
       })
       break
@@ -106,7 +106,7 @@ export default defineBackground(() => {
     if (info.menuItemId === "translate-selection" && tab?.id) {
       try {
         // 設定を取得
-        const result = await browser.storage.sync.get(["provider", "openai_key", "claude_key", "deepseek_key", "model"])
+        const result = await browser.storage.sync.get(["provider", "openai_key", "claude_key", "model"])
         const provider = result.provider as Settings["provider"]
         const apiKey = result[`${provider}_key`] as string
         const model = result.model as string

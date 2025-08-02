@@ -6,7 +6,7 @@
  */
 
 // プロバイダー型
-export type AIProvider = "openai" | "claude" | "deepseek" | "gemini"
+export type AIProvider = "openai" | "claude" | "gemini"
 
 // トークン使用量
 export interface TokenUsage {
@@ -72,7 +72,6 @@ export interface Settings {
   provider: AIProvider
   openai_key?: string
   claude_key?: string
-  deepseek_key?: string
   gemini_key?: string
   model: string
 }
@@ -82,7 +81,6 @@ export const STORAGE_KEYS = {
   PROVIDER: "provider",
   OPENAI_KEY: "openai_key",
   CLAUDE_KEY: "claude_key",
-  DEEPSEEK_KEY: "deepseek_key",
   GEMINI_KEY: "gemini_key",
   MODEL: "model",
 } as const
@@ -101,7 +99,6 @@ export const ERROR_MESSAGES = {
 export const DEFAULT_MODELS: Record<AIProvider, string> = {
   openai: "gpt-4.1-nano",
   claude: "claude-3-5-haiku-20241022",
-  deepseek: "deepseek-chat",
   gemini: "gemini-2.5-flash-lite-preview-06-17",
 }
 

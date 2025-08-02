@@ -27,3 +27,5 @@ web-ext.config.ts
 
 # Temporary files
 tmp/
+ai
+.serena

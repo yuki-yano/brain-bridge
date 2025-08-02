@@ -45,7 +45,7 @@ function App() {
   })
   const [apiKeys, setApiKeys] = useState<Record<Provider, string>>({
     claude: "",
-    deepseek: "",
+    gemini: "",
     openai: "",
   })
   const [status, setStatus] = useState("")
@@ -62,7 +62,7 @@ function App() {
         STORAGE_KEYS.PROVIDER,
         STORAGE_KEYS.OPENAI_KEY,
         STORAGE_KEYS.CLAUDE_KEY,
-        STORAGE_KEYS.DEEPSEEK_KEY,
+        STORAGE_KEYS.GEMINI_KEY,
         STORAGE_KEYS.MODEL,
         STORAGE_KEYS.SHOW_TOKEN_COUNT,
       ])
@@ -70,7 +70,7 @@ function App() {
         const provider = (result[STORAGE_KEYS.PROVIDER] as Provider) ?? DEFAULT_PROVIDER
         const apiKeyMap = {
           claude: (result[STORAGE_KEYS.CLAUDE_KEY] as string) ?? "",
-          deepseek: (result[STORAGE_KEYS.DEEPSEEK_KEY] as string) ?? "",
+          gemini: (result[STORAGE_KEYS.GEMINI_KEY] as string) ?? "",
           openai: (result[STORAGE_KEYS.OPENAI_KEY] as string) ?? "",
         }
         setApiKeys(apiKeyMap)
@@ -139,7 +139,7 @@ function App() {
         STORAGE_KEYS.PROVIDER,
         STORAGE_KEYS.OPENAI_KEY,
         STORAGE_KEYS.CLAUDE_KEY,
-        STORAGE_KEYS.DEEPSEEK_KEY,
+        STORAGE_KEYS.GEMINI_KEY,
         STORAGE_KEYS.MODEL,
         STORAGE_KEYS.SHOW_TOKEN_COUNT,
       ])
@@ -148,7 +148,7 @@ function App() {
       setSettings(initialSettings)
       setApiKeys({
         claude: "",
-        deepseek: "",
+        gemini: "",
         openai: "",
       })
 
@@ -200,7 +200,6 @@ function App() {
         STORAGE_KEYS.PROVIDER,
         STORAGE_KEYS.OPENAI_KEY,
         STORAGE_KEYS.CLAUDE_KEY,
-        STORAGE_KEYS.DEEPSEEK_KEY,
         STORAGE_KEYS.MODEL,
       ])
       const provider = result[STORAGE_KEYS.PROVIDER] as Provider
@@ -282,7 +281,7 @@ function App() {
           </div>
           <div className="space-y-2">
             <label htmlFor="apiKey" className="text-sm font-medium text-muted-foreground">
-              {settings.provider === "openai" ? "OpenAI" : settings.provider === "claude" ? "Claude" : "Deepseek"}{" "}
+              {settings.provider === "openai" ? "OpenAI" : settings.provider === "claude" ? "Claude" : "Gemini"}{" "}
               APIキー
             </label>
             <Input
@@ -293,7 +292,7 @@ function App() {
                   ? "sk-..."
                   : settings.provider === "claude"
                     ? "sk-ant-..."
-                    : "sk-deep-..."
+                    : "aiza..."
               }
               type="password"
               value={settings.apiKey}

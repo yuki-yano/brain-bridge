@@ -1,7 +1,7 @@
 export const PROVIDER_OPTIONS = [
   { label: "OpenAI", value: "openai" as const },
   { label: "Claude", value: "claude" as const },
-  { label: "DeepSeek", value: "deepseek" as const },
+  { label: "Gemini", value: "gemini" as const },
 ] as const
 
 export type Provider = (typeof PROVIDER_OPTIONS)[number]["value"]
@@ -17,18 +17,23 @@ export interface ModelOption {
 
 export const MODEL_OPTIONS: Record<Provider, ModelOption[]> = {
   openai: [
-    { label: "GPT-4o", value: "gpt-4o", pricing: { input: 5, output: 15 } },
-    { label: "o3-mini", value: "o3-mini", pricing: { input: 2.5, output: 10 } },
-    { label: "o1-mini", value: "o1-mini", pricing: { input: 2.5, output: 10 } },
-    { label: "o1", value: "o1", pricing: { input: 30, output: 60 } },
+    { label: "GPT-4.1", value: "gpt-4.1", pricing: { input: 2, output: 8 } },
+    { label: "GPT-4.1 mini", value: "gpt-4.1-mini", pricing: { input: 0.4, output: 1.6 } },
+    { label: "GPT-4.1 nano", value: "gpt-4.1-nano", pricing: { input: 0.1, output: 0.4 } },
   ],
   claude: [
+    { label: "Claude 4 Sonnet", value: "claude-sonnet-4-20250514", pricing: { input: 3, output: 15 } },
     { label: "Claude 3.5 Sonnet", value: "claude-3-5-sonnet-latest", pricing: { input: 3, output: 15 } },
-    { label: "Claude 3.5 Haiku", value: "claude-3-5-haiku-latest", pricing: { input: 0.8, output: 4 } },
+    { label: "Claude 3.5 Haiku", value: "claude-3-5-haiku-20241022", pricing: { input: 0.8, output: 4 } },
   ],
-  deepseek: [
-    { label: "DeepSeek Reasoner", value: "deepseek-reasoner", pricing: { input: 0.55, output: 2.19 } },
-    { label: "DeepSeek Chat", value: "deepseek-chat", pricing: { input: 0.14, output: 0.28 } },
+  gemini: [
+    { label: "Gemini 2.5 Flash", value: "gemini-2.5-flash", pricing: { input: 0.3, output: 2.5 } },
+    {
+      label: "Gemini 2.5 Flash-Lite",
+      value: "gemini-2.5-flash-lite",
+      pricing: { input: 0.1, output: 0.4 },
+    },
+    { label: "Gemini 2.5 Pro", value: "gemini-2.5-pro", pricing: { input: 1.25, output: 10 } },
   ],
 } as const
 
@@ -61,7 +66,7 @@ export const STORAGE_KEYS = {
   MODEL: "model",
   OPENAI_KEY: "openai_key",
   CLAUDE_KEY: "claude_key",
-  DEEPSEEK_KEY: "deepseek_key",
+  GEMINI_KEY: "gemini_key",
   SHOW_TOKEN_COUNT: "show_token_count",
 } as const
 
