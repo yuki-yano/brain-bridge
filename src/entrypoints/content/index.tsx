@@ -346,25 +346,8 @@ export default defineContentScript({
             return
           }
 
-          console.log("=== Selection Info ===")
-          console.log("Range count:", selection.rangeCount)
-          console.log("Selected text:", selection.toString())
-
           // Firefoxで複数のRangeがある場合の処理
           if (selection.rangeCount > 1) {
-            console.log("Multiple ranges detected, merging...")
-
-            // すべてのRangeを確認
-            for (let i = 0; i < selection.rangeCount; i++) {
-              const range = selection.getRangeAt(i)
-              console.log(`Range ${i}:`, {
-                start: range.startContainer,
-                startOffset: range.startOffset,
-                end: range.endContainer,
-                endOffset: range.endOffset,
-                text: range.toString(),
-              })
-            }
 
             // 最初のRangeの開始位置と最後のRangeの終了位置から新しいRangeを作成
             const firstRange = selection.getRangeAt(0)
@@ -373,13 +356,6 @@ export default defineContentScript({
             const mergedRange = document.createRange()
             mergedRange.setStart(firstRange.startContainer, firstRange.startOffset)
             mergedRange.setEnd(lastRange.endContainer, lastRange.endOffset)
-
-            console.log("Merged range:", {
-              start: mergedRange.startContainer,
-              end: mergedRange.endContainer,
-              commonAncestor: mergedRange.commonAncestorContainer,
-              text: mergedRange.toString(),
-            })
 
             translateRange(mergedRange, provider, apiKey, model)
               .then((results) => {
@@ -395,13 +371,6 @@ export default defineContentScript({
           } else {
             // 単一のRangeの場合（既存の処理）
             const originalRange = selection.getRangeAt(0).cloneRange()
-            console.log("Single range:", {
-              start: originalRange.startContainer,
-              end: originalRange.endContainer,
-              commonAncestor: originalRange.commonAncestorContainer,
-              text: originalRange.toString(),
-            })
-
             translateRange(originalRange, provider, apiKey, model)
               .then((results) => {
                 sendResponse({ success: true, tokenUsage: results?.tokenUsage })
